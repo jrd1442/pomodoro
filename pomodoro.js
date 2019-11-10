@@ -9,6 +9,8 @@ class Pomodoro {
     updateView() {
         // split the view logic out?
         document.getElementById("pom").innerHTML = this.secs;
+
+        document.title = this.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer";
     }
 
     tick() {
