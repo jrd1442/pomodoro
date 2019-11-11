@@ -14,17 +14,21 @@ class Pomodoro {
     }
 
     tick() {
+        let prev_tick = this.last_tick;
+        this.last_tick = new Date();
+
         if (this.secs > 0) {
-            this.secs -= 1;
+            this.secs -= Math.trunc((this.last_tick - prev_tick)/1000);
         }
 
         this.alarm = this.secs == 0;
         this.updateView();
+
     }
 
     resume() {
-        // TODO: make this more accurate. IE, use DateTime for keeping track of secs
         this.interval = setInterval(this.tick.bind(this), 1000);
+        this.last_tick = new Date();
     }
 
     pause() {
