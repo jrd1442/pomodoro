@@ -1,7 +1,7 @@
-function toHHMMSS(secs) {
-    let h = Math.trunc(secs/3600);
-    let m = (secs/60) % 60;
-    let s = secs % 60;
+function toHHMMSS(msecs) {
+    let h = Math.trunc(msecs/3600000);
+    let m = Math.trunc(msecs/60000) % 60;
+    let s = Math.trunc(msecs/1000) % 60;
 
     return h.toString().padStart(2, '0') + ':' +
     m.toString().padStart(2, '0') + ':' +
@@ -9,16 +9,16 @@ function toHHMMSS(secs) {
 }
 
 class Pomodoro {
-    constructor(secs) {
-        this.total_secs = secs;
-        this.secs = secs;
+    constructor(msecs) {
+        this.total_msecs = msecs;
+        this.msecs = msecs;
         this.alarm = false;
         this.updateView();
     }
 
     updateView() {
         // split the view logic out?
-        document.getElementById("pom").innerHTML = toHHMMSS(this.secs);
+        document.getElementById("pom").innerHTML = toHHMMSS(this.msecs);
 
         document.title = this.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer";
     }
@@ -27,11 +27,11 @@ class Pomodoro {
         let prev_tick = this.last_tick;
         this.last_tick = new Date();
 
-        if (this.secs > 0) {
-            this.secs -= Math.trunc((this.last_tick - prev_tick)/1000);
+        if (this.msecs > 0) {
+            this.msecs -= Math.trunc(this.last_tick - prev_tick);
         }
 
-        this.alarm = this.secs == 0;
+        this.alarm = this.msecs == 0;
         this.updateView();
 
     }
@@ -46,7 +46,7 @@ class Pomodoro {
     }
 
     reset() {
-        this.secs = this.total_secs;
+        this.msecs = this.total_secs;
         this.alarm = false;
         this.updateView();
     }
@@ -79,4 +79,4 @@ class PomodoroHandler {
     }
 };
 
-new PomodoroHandler(pomHandler,  new Pomodoro(60));
+new PomodoroHandler(pomHandler,  new Pomodoro(60000));
