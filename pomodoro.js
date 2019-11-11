@@ -13,14 +13,17 @@ class Pomodoro {
         this.total_msecs = msecs;
         this.msecs = msecs;
         this.alarm = false;
-        this.updateView();
+        this.observers = [];
     }
 
-    updateView() {
-        // split the view logic out?
-        document.getElementById("pom").innerHTML = toHHMMSS(this.msecs);
+    subscribe(observer) {
+        this.observers.push(observer);
+    }
 
-        document.title = this.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer";
+    notify() {
+        for (let observer of this.observers) {
+            observer(this);
+        }
     }
 
     tick() {
@@ -31,9 +34,8 @@ class Pomodoro {
             this.msecs -= Math.trunc(this.last_tick - prev_tick);
         }
 
-        this.alarm = this.msecs == 0;
-        this.updateView();
-
+        this.alarm = this.msecs <= 0;
+        this.notify();
     }
 
     resume() {
@@ -46,9 +48,9 @@ class Pomodoro {
     }
 
     reset() {
-        this.msecs = this.total_secs;
+        this.msecs = this.total_msecs;
         this.alarm = false;
-        this.updateView();
+        this.notify();
     }
 };
 
@@ -79,4 +81,21 @@ class PomodoroHandler {
     }
 };
 
-new PomodoroHandler(pomHandler,  new Pomodoro(60000));
+class PomodoroView {
+    constructor(elem, pom) {
+        this._elem = elem;
+        pom.subscribe(this.updateView.bind(this));
+        this.updateView(pom);
+    }
+    
+    updateView(pom) {
+        this._elem.innerHTML = toHHMMSS(pom.msecs);
+
+        document.title = pom.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer";
+    }
+
+};
+
+let pom = new Pomodoro(60000);
+new PomodoroHandler(pomHandler,  pom);
+new PomodoroView(pomView,  pom);
