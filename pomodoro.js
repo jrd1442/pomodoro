@@ -1,10 +1,8 @@
-function toHHMMSS(msecs) {
-    let h = Math.trunc(msecs / 3600000);
+function toMMSS(msecs) {
     let m = Math.trunc(msecs / 60000) % 60;
     let s = Math.trunc(msecs / 1000) % 60;
 
-    return h.toString().padStart(2, '0') + ':' +
-        m.toString().padStart(2, '0') + ':' +
+    return m.toString().padStart(2, '0') + ':' +
         s.toString().padStart(2, '0');
 }
 
@@ -89,7 +87,7 @@ class PomodoroView {
     }
 
     updateView(pom) {
-        this._elem.innerHTML = toHHMMSS(pom.msecs);
+        this._elem.innerHTML = toMMSS(pom.msecs);
 
         document.title = pom.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer";
     }
