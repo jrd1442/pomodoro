@@ -39,7 +39,7 @@ class Pomodoro {
     }
 
     resume() {
-        this.interval = setInterval(this.tick.bind(this), 500);
+        this.interval = setInterval(this.tick.bind(this), 125);
         this.last_tick = new Date();
     }
 
