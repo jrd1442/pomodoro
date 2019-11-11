@@ -1,3 +1,13 @@
+function toHHMMSS(secs) {
+    let h = Math.trunc(secs/3600);
+    let m = (secs/60) % 60;
+    let s = secs % 60;
+
+    return h.toString().padStart(2, '0') + ':' +
+    m.toString().padStart(2, '0') + ':' +
+    s.toString().padStart(2, '0');
+}
+
 class Pomodoro {
     constructor(secs) {
         this.total_secs = secs;
@@ -8,7 +18,7 @@ class Pomodoro {
 
     updateView() {
         // split the view logic out?
-        document.getElementById("pom").innerHTML = this.secs;
+        document.getElementById("pom").innerHTML = toHHMMSS(this.secs);
 
         document.title = this.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer";
     }
