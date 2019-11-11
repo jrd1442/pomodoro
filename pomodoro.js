@@ -1,11 +1,11 @@
 function toHHMMSS(msecs) {
-    let h = Math.trunc(msecs/3600000);
-    let m = Math.trunc(msecs/60000) % 60;
-    let s = Math.trunc(msecs/1000) % 60;
+    let h = Math.trunc(msecs / 3600000);
+    let m = Math.trunc(msecs / 60000) % 60;
+    let s = Math.trunc(msecs / 1000) % 60;
 
     return h.toString().padStart(2, '0') + ':' +
-    m.toString().padStart(2, '0') + ':' +
-    s.toString().padStart(2, '0');
+        m.toString().padStart(2, '0') + ':' +
+        s.toString().padStart(2, '0');
 }
 
 class Pomodoro {
@@ -39,7 +39,7 @@ class Pomodoro {
     }
 
     resume() {
-        this.interval = setInterval(this.tick.bind(this), 1000);
+        this.interval = setInterval(this.tick.bind(this), 500);
         this.last_tick = new Date();
     }
 
@@ -87,7 +87,7 @@ class PomodoroView {
         pom.subscribe(this.updateView.bind(this));
         this.updateView(pom);
     }
-    
+
     updateView(pom) {
         this._elem.innerHTML = toHHMMSS(pom.msecs);
 
@@ -97,5 +97,5 @@ class PomodoroView {
 };
 
 let pom = new Pomodoro(60000);
-new PomodoroHandler(pomHandler,  pom);
-new PomodoroView(pomView,  pom);
+new PomodoroHandler(pomHandler, pom);
+new PomodoroView(pomView, pom);
