@@ -52,6 +52,8 @@ class Pomodoro {
     }
 
     reset() {
+        this.pause();
+        // possible race condition? is a scheduled tick going to run?
         this.msecs = this.total_msecs;
         this.alarm = false;
         this.notify();
