@@ -94,8 +94,6 @@ class PomodoroView {
 
     updateView(pom) {
         this._elem.innerHTML = toMMSS(pom.msecs);
-
-        document.title = pom.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer";
     }
 
 };
@@ -103,3 +101,5 @@ class PomodoroView {
 let pom = new Pomodoro(60000);
 new PomodoroHandler(pomHandler, pom);
 new PomodoroView(pomView, pom);
+
+pom.subscribe(p => document.title = pom.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer");
