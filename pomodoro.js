@@ -100,8 +100,8 @@ class PomodoroView {
 
 };
 
-let pom = new Pomodoro(60000);
+let pom = new Pomodoro(6000);
 new PomodoroHandler(pomHandler, pom);
 new PomodoroView(pomView, pom);
 
-pom.subscribe(p => document.title = pom.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer");
+pom.subscribe(p => document.title = p.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer");
