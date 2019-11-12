@@ -31,10 +31,9 @@ class Pomodoro {
 
         if (this.msecs > 0) {
             this.msecs -= Math.trunc(this.last_tick - prev_tick);
+            this.alarm = this.msecs <= 0;
+            this.notify();
         }
-
-        this.alarm = this.msecs <= 0;
-        this.notify();
     }
 
     resume() {
@@ -104,4 +103,43 @@ let pom = new Pomodoro(6000);
 new PomodoroHandler(pomHandler, pom);
 new PomodoroView(pomView, pom);
 
-pom.subscribe(p => document.title = p.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer");
+let titleListener = p => document.title = p.alarm ? "Bzzzz!" : "Bambi's Pomodoro Timer";
+pom.subscribe(titleListener);
+
+// clearly not mine
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.setAttribute("loop", "loop");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function () {
+        this.sound.play();
+    }
+    this.stop = function () {
+        this.sound.pause();
+    }
+}
+
+class AlarmListener {
+    constructor(pom) {
+        this.alarmSound = new sound("beep-07.wav");
+        this.playing = false;
+        pom.subscribe(this.onAlarm.bind(this));
+        this.onAlarm(pom);
+    }
+
+    onAlarm(pom) {
+        if (!this.playing && pom.alarm) {
+            this.playing = true;
+            this.alarmSound.play();
+        } else if (this.playing && !pom.alarm) {
+            this.alarmSound.stop();
+            this.playing = false;
+        }
+    }
+};
+
+new AlarmListener(pom);
