@@ -11,6 +11,7 @@ class Pomodoro {
         this.total_msecs = msecs;
         this.msecs = msecs;
         this.alarm = false;
+        this.interval = null;
         this.observers = [];
     }
 
@@ -37,12 +38,17 @@ class Pomodoro {
     }
 
     resume() {
-        this.interval = setInterval(this.tick.bind(this), 125);
-        this.last_tick = new Date();
+        if (this.interval == null) {
+            this.interval = setInterval(this.tick.bind(this), 125);
+            this.last_tick = new Date();
+        }
     }
 
     pause() {
-        clearInterval(this.interval);
+        if (this.interval != null) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
     }
 
     reset() {
